@@ -3,6 +3,7 @@ package br.com.certacon.restful_api_java_parameters2.services;
 import br.com.certacon.restful_api_java_parameters2.model.Person;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
@@ -25,6 +26,5 @@ public class PersonServices {
 
         return person;
     }
-
 
 }
