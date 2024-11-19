@@ -1,14 +1,21 @@
 package br.com.certacon.restful_api_java_obj_list.services;
 
+import br.com.certacon.restful_api_java_obj_list.data.vo.v2.PersonVOV2;
 import br.com.certacon.restful_api_java_obj_list.exceptions.ResourceNotFoundException;
+import br.com.certacon.restful_api_java_obj_list.mapper.DozerMapper;
+import br.com.certacon.restful_api_java_obj_list.mapper_custom.PersonMapper;
 import br.com.certacon.restful_api_java_obj_list.model.Person;
 import br.com.certacon.restful_api_java_obj_list.repositories.PersonRepository;
+import br.com.certacon.restful_api_java_obj_list.data.vo.v1.PersonVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
+import static br.com.certacon.restful_api_java_obj_list.mapper.DozerMapper.mapper;
 
 @Service
 public class PersonServices {
@@ -19,31 +26,44 @@ public class PersonServices {
     @Autowired
     PersonRepository repository;
 
-    public List<Person> findAll(){
+    @Autowired
+    PersonMapper mapper;
 
+    public List<PersonVO> findAll() {
         logger.info("Finding all people!");
 
-        return repository.findAll();
-
+        return DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
     }
-    public Person findById(Long id){
+    public PersonVO findById(Long id){
 
         logger.info("Finding one person!");
 
-
-
-        return repository.findById(id)
+        var entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        return DozerMapper.parseObject(entity, PersonVO.class);
     }
 
-    public Person create(Person person){
+    public PersonVO create(PersonVO person){
 
         logger.info("Creating one person!");
 
-        return repository.save(person);
+        var entity = DozerMapper.parseObject(person, Person.class);
+        var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+
+        return vo;
     }
 
-    public Person update(Person person){
+    public PersonVOV2 createV2(PersonVOV2 person){
+
+        logger.info("Creating one person with V2!");
+
+        var entity = mapper.convertVoToEntity(person);
+        var vo = mapper.convertEntityToVo((repository.save(entity)));
+
+        return vo;
+    }
+
+    public PersonVO update(PersonVO person){
 
         logger.info("Updating one person!");
 
@@ -56,7 +76,8 @@ public class PersonServices {
         entity.setAddres(person.getAddres());
         entity.setGender(person.getGender());
 
-        return repository.save(person);
+        var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        return vo;
     }
 
     public void delete(Long id){

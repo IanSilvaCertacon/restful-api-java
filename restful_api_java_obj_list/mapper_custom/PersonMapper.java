@@ -1,0 +1,33 @@
+package br.com.certacon.restful_api_java_obj_list.mapper_custom;
+
+import br.com.certacon.restful_api_java_obj_list.data.vo.v2.PersonVOV2;
+import br.com.certacon.restful_api_java_obj_list.model.Person;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+
+@Service
+public class PersonMapper {
+
+    public PersonVOV2 convertEntityToVo(Person person){
+        PersonVOV2 vo = new PersonVOV2();
+        vo.setId(person.getId());
+        vo.setAddres(person.getAddres());
+        vo.setBirthDay(new Date());
+        vo.setFirtsName(person.getFirtsName());
+        vo.setLastName(person.getLastName());
+        vo.setGender(person.getGender());
+        return vo;
+    }
+
+    public Person convertVoToEntity(PersonVOV2 person){
+        Person entity = new Person();
+        entity.setId(person.getId());
+        entity.setAddres(person.getAddres());
+        entity.setFirtsName(person.getFirtsName());
+        entity.setLastName(person.getLastName());
+        entity.setGender(person.getGender());
+        return entity;
+    }
+
+}
