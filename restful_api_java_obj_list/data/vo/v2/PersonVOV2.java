@@ -11,9 +11,9 @@ public class PersonVOV2 implements Serializable {
 
 
     private Long id;
-    private String firtsName;
+    private String firstName;
     private String lastName;
-    private String addres;
+    private String address;
     private String gender;
 
     private Date birthDay;
@@ -21,44 +21,43 @@ public class PersonVOV2 implements Serializable {
     public PersonVOV2() {
     }
 
-    public void setFirtsName(String firtsName) {
-        this.firtsName = firtsName;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setAddres(String addres) {
-        this.addres = addres;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setGender(String gender) {
         this.gender = gender;
     }
 
-    public String getFirtsName() {
-        return firtsName;
+    public Long getId() {
+        return id;
+    }
+    public String getFirstName() {
+        return firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public String getAddres() {
-        return addres;
+    public String getAddress() {
+        return address;
     }
 
     public String getGender() {
         return gender;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Date getBirthDay() { return birthDay;}
@@ -69,11 +68,11 @@ public class PersonVOV2 implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         PersonVOV2 that = (PersonVOV2) o;
-        return Objects.equals(id, that.id) && Objects.equals(firtsName, that.firtsName) && Objects.equals(lastName, that.lastName) && Objects.equals(addres, that.addres) && Objects.equals(gender, that.gender) && Objects.equals(birthDay, that.birthDay);
+        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(address, that.address) && Objects.equals(gender, that.gender) && Objects.equals(birthDay, that.birthDay);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firtsName, lastName, addres, gender, birthDay);
+        return Objects.hash(id, firstName, lastName, address, gender, birthDay);
     }
 }

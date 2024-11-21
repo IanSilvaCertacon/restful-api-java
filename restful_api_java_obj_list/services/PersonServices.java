@@ -70,13 +70,14 @@ public class PersonServices {
         var entity = repository.findById(person.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        entity.setId(counter.incrementAndGet());
-        entity.setFirtsName(person.getFirtsName());
+        //entity.setId(counter.incrementAndGet());
+        entity.setFirstName(person.getFirstName());
         entity.setLastName(person.getLastName());
-        entity.setAddres(person.getAddres());
+        entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        var savedEntity = repository.save(entity);
+        var vo = DozerMapper.parseObject(savedEntity, PersonVO.class);
         return vo;
     }
 

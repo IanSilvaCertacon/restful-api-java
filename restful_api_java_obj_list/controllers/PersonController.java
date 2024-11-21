@@ -2,6 +2,7 @@ package br.com.certacon.restful_api_java_obj_list.controllers;
 
 import br.com.certacon.restful_api_java_obj_list.data.vo.v1.PersonVO;
 import br.com.certacon.restful_api_java_obj_list.data.vo.v2.PersonVOV2;
+import br.com.certacon.restful_api_java_obj_list.exceptions.ResourceNotFoundException;
 import br.com.certacon.restful_api_java_obj_list.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,30 +19,39 @@ public class PersonController {
     private PersonServices service;
     //private PersonServices service = new PersonServices();
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public List<PersonVO> findAll(){
          return service.findAll();
     }
 
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public PersonVO findbyId(@PathVariable(value = "id") Long id) {
         return service.findById(id);
     }
 
-    @PostMapping (consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping (consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public PersonVO create(@RequestBody PersonVO person) {
         return service.create(person);
     }
 
-    @PostMapping (value = "/v2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping (value = "/v2", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public PersonVOV2 createV2(@RequestBody PersonVOV2 person) {
         return service.createV2(person);
     }
 
-    @PutMapping (consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping (consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public PersonVO update(@RequestBody PersonVO person) {
-        return service.update(person);
+        PersonVO personEntity = service.findById(person.getId());  // Encontre a entidade no banco de dados com o ID
+        if (personEntity != null) {
+            //return service.update(person);
+            return service.update(personEntity);  // Retorne a entidade atualizada
+        } else {
+            throw new ResourceNotFoundException("Pessoa não encontrada");
+        }
     }
 
     @DeleteMapping(value = "/{id}")
