@@ -8,10 +8,18 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 @Service
 public class PersonMapper {
 
+    public List<PersonVO> toPersonVOList(List<Person> persons) {
+        List<PersonVO> voList = new ArrayList<>();
+        for (Person person : persons) {
+            voList.add(toPersonVO(person));
+        }
+        return voList;
+    }
+
+    // Outros métodos existentes
     public PersonVO toPersonVO(Person person) {
         PersonVO vo = new PersonVO();
         vo.setKey(person.getId());
@@ -32,32 +40,25 @@ public class PersonMapper {
         return entity;
     }
 
-    public List<PersonVO> toPersonVOList(List<Person> persons) {
-        List<PersonVO> vos = new ArrayList<>();
-        for (Person person : persons) {
-            vos.add(toPersonVO(person));
-        }
-        return vos;
-    }
-
+    // Métodos para V2
     public PersonVOV2 convertEntityToVo(Person person) {
         PersonVOV2 vo = new PersonVOV2();
         vo.setId(person.getId());
         vo.setFirstName(person.getFirstName());
         vo.setLastName(person.getLastName());
         vo.setAddress(person.getAddress());
-        vo.setBirthDay(new Date());
         vo.setGender(person.getGender());
+        vo.setBirthDay(new Date());
         return vo;
     }
 
-    public Person convertVoToEntity(PersonVOV2 person) {
+    public Person convertVoToEntity(PersonVOV2 personV2) {
         Person entity = new Person();
-        entity.setId(person.getId());
-        entity.setFirstName(person.getFirstName());
-        entity.setLastName(person.getLastName());
-        entity.setAddress(person.getAddress());
-        entity.setGender(person.getGender());
+        entity.setId(personV2.getId());
+        entity.setFirstName(personV2.getFirstName());
+        entity.setLastName(personV2.getLastName());
+        entity.setAddress(personV2.getAddress());
+        entity.setGender(personV2.getGender());
         return entity;
     }
 }
