@@ -27,8 +27,8 @@ public class Person implements Serializable {
 
     public Person(){}
 
-    public void setFirstName(String firtsName) {
-        this.firstName = firtsName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public void setLastName(String lastName) {
