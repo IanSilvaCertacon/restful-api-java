@@ -19,7 +19,6 @@ public class PersonMapper {
         return voList;
     }
 
-    // Outros métodos existentes
     public PersonVO toPersonVO(Person person) {
         PersonVO vo = new PersonVO();
         vo.setKey(person.getId());
@@ -40,7 +39,6 @@ public class PersonMapper {
         return entity;
     }
 
-    // Métodos para V2
     public PersonVOV2 convertEntityToVo(Person person) {
         PersonVOV2 vo = new PersonVOV2();
         vo.setId(person.getId());

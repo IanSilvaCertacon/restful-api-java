@@ -52,8 +52,8 @@ public class PersonController {
 //                linkTo(methodOn(PersonController.class).findById(createdPerson.getKey())).withSelfRel());
 //    }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE, "application/x-yaml"},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, "application/x-yaml"})
     public ResponseEntity<PersonVO> create(@RequestBody PersonVO person) {
         return ResponseEntity.ok(service.create(person));
     }

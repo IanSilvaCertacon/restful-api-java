@@ -19,17 +19,25 @@ public class YamlJackson2HttpMessageConverter extends AbstractHttpMessageConvert
     private final Yaml yaml;
 
     public YamlJackson2HttpMessageConverter() {
-        super(MediaType.parseMediaType("application/x-yaml"));
+        // Suporte para ambos os tipos de media YAML
+        super(
+                MediaType.parseMediaType("application/x-yaml"),
+                MediaType.parseMediaType("application/yaml"),
+                MediaType.parseMediaType("text/yaml")
+        );
+
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         options.setPrettyFlow(true);
+        options.setAllowUnicode(true); // Suporte para caracteres Unicode
+        options.setIndent(2); // Indentação mais legível
         this.yaml = new Yaml(options);
     }
 
     @Override
     protected boolean supports(Class<?> clazz) {
-        // Você pode adicionar lógica aqui para determinar quais classes são suportadas
-        return true;
+        // Verifica se a classe pode ser serializada
+        return !clazz.isPrimitive() && !clazz.isArray();
     }
 
     @Override
@@ -37,6 +45,8 @@ public class YamlJackson2HttpMessageConverter extends AbstractHttpMessageConvert
             throws IOException, HttpMessageNotReadableException {
         try (InputStreamReader reader = new InputStreamReader(inputMessage.getBody(), StandardCharsets.UTF_8)) {
             return yaml.loadAs(reader, clazz);
+        } catch (Exception e) {
+            throw new HttpMessageNotReadableException("Could not read YAML: " + e.getMessage(), e, inputMessage);
         }
     }
 
@@ -44,7 +54,10 @@ public class YamlJackson2HttpMessageConverter extends AbstractHttpMessageConvert
     protected void writeInternal(Object object, HttpOutputMessage outputMessage)
             throws IOException, HttpMessageNotWritableException {
         try (OutputStreamWriter writer = new OutputStreamWriter(outputMessage.getBody(), StandardCharsets.UTF_8)) {
+            outputMessage.getHeaders().setContentType(MediaType.parseMediaType("application/x-yaml"));
             yaml.dump(object, writer);
+        } catch (Exception e) {
+            throw new HttpMessageNotWritableException("Could not write YAML: " + e.getMessage(), e);
         }
     }
 }

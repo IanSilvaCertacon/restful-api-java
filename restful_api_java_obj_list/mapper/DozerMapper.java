@@ -1,3 +1,5 @@
+package br.com.certacon.restful_api_java_obj_list.mapper;
+
 import br.com.certacon.restful_api_java_obj_list.data.vo.v1.PersonVO;
 import br.com.certacon.restful_api_java_obj_list.model.Person;
 import org.mapstruct.Mapper;
@@ -35,8 +37,6 @@ public class DozerMapper {
                 // Convertendo Person para PersonVO
                 destinationObjects.add((D)personMapper.toPersonVO((Person) o));
             } else {
-                // Caso não seja Person, o que fazer? Dependendo do tipo de "O" você pode adicionar outro mapeamento
-                // Aqui você pode adicionar outra lógica para tratar outros tipos, caso haja
             }
         }
         return destinationObjects;
