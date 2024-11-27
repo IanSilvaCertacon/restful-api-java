@@ -1,11 +1,14 @@
 package br.com.certacon.restful_api_java_obj_list.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -14,7 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
-public class YamlJackson2HttpMessageConverter extends AbstractHttpMessageConverter<Object> {
+/*public class YamlJackson2HttpMessageConverter extends AbstractHttpMessageConverter<Object> {
 
     private final Yaml yaml;
 
@@ -55,9 +58,18 @@ public class YamlJackson2HttpMessageConverter extends AbstractHttpMessageConvert
             throws IOException, HttpMessageNotWritableException {
         try (OutputStreamWriter writer = new OutputStreamWriter(outputMessage.getBody(), StandardCharsets.UTF_8)) {
             outputMessage.getHeaders().setContentType(MediaType.parseMediaType("application/x-yaml"));
+            outputMessage.getHeaders().add("Content-Type", "application/x-yaml;charset=UTF-8");
             yaml.dump(object, writer);
-        } catch (Exception e) {
-            throw new HttpMessageNotWritableException("Could not write YAML: " + e.getMessage(), e);
         }
+    }
+}*/
+
+public class YamlJackson2HttpMessageConverter extends AbstractJackson2HttpMessageConverter {
+
+    public YamlJackson2HttpMessageConverter() {
+        super(
+                new ObjectMapper(new YAMLFactory()),
+                MediaType.parseMediaType("application/x-yaml")
+        );
     }
 }

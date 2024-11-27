@@ -1,4 +1,4 @@
-package unittest_mockito;
+package br.com.certacon.restful_api_java_obj_list.mapper;
 
 import java.util.ArrayList;
 import java.util.List;

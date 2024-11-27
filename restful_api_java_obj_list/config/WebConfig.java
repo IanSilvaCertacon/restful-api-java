@@ -14,15 +14,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 import java.util.List;
 
+/*
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     private static final MediaType MEDIA_TYPE_APPLICATION_YML = MediaType.valueOf("application/x-yaml");
 
-    /*@Override
+    */
+/*@Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new YamlJackson2HttpMessageConverter());
-    }*/
+    }*//*
+
 
     @Bean
     public YamlJackson2HttpMessageConverter      yamlMessageConverter() {
@@ -48,5 +51,34 @@ public class WebConfig implements WebMvcConfigurer {
                 .mediaType("xml", MediaType.APPLICATION_XML)
                 .mediaType("yaml", MEDIA_TYPE_APPLICATION_YML)
                 .mediaType("yml", MEDIA_TYPE_APPLICATION_YML);
+    }
+}*/
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    private static final MediaType MEDIA_TYPE_APPLICATION_YML = MediaType.valueOf("application/x-yaml");
+
+    @Bean
+    public YamlJackson2HttpMessageConverter yamlMessageConverter() {
+        return new YamlJackson2HttpMessageConverter();
+    }
+
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(yamlMessageConverter());
+    }
+
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer
+                .favorParameter(false)
+                .ignoreAcceptHeader(false)
+                .useRegisteredExtensionsOnly(false)
+                .defaultContentType(MediaType.APPLICATION_JSON)
+                .mediaType("json", MediaType.APPLICATION_JSON)
+                .mediaType("xml", MediaType.APPLICATION_XML)
+                .mediaType("x-yaml", MEDIA_TYPE_APPLICATION_YML)
+                .mediaType("yaml", MEDIA_TYPE_APPLICATION_YML);
     }
 }
